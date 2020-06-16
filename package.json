@@ -1,0 +1,23 @@
+{
+  "name": "storybooks",
+  "version": "1.0.0",
+  "description": "app to sheare public or write privet stories",
+  "main": "app.js",
+  "scripts": {
+    "start": "node app.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/saikat1095/storybooks.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/saikat1095/storybooks/issues"
+  },
+  "homepage": "https://github.com/saikat1095/storybooks#readme",
+  "dependencies": {
+    "express": "^4.17.1",
+    "mongoose": "^5.9.19"
+  }
+}
