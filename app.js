@@ -5,12 +5,16 @@ const cookieParser = require('cookie-parser');
 const session = require('express-session');
 const exphbs = require('express-handlebars');
 const path = require('path');
-
+const bodyParser = require('body-parser');
 
 
 // fixing handlebars read data from mongo problem && Import function exported by newly installed node  
 const Handlebars = require('handlebars');
 const { allowInsecurePrototypeAccess } = require("@handlebars/allow-prototype-access");
+
+// Load Model
+require('./models/User')
+require('./models/Story');
 
 
 // Passport Config
@@ -35,6 +39,10 @@ mongoose.connect(keys.mongoURI,{
 ).catch(err => console.log(err));
 
 const app = express();
+
+// using body parser
+app.use(bodyParser.urlencoded({extended : false}))
+app.use(bodyParser.json());
 
 
 // Handlebars Middleware
