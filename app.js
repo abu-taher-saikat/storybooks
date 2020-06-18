@@ -6,6 +6,8 @@ const session = require('express-session');
 const exphbs = require('express-handlebars');
 const path = require('path');
 const bodyParser = require('body-parser');
+const methodOverride = require('method-override');
+
 
 
 // fixing handlebars read data from mongo problem && Import function exported by newly installed node  
@@ -29,6 +31,14 @@ const stories = require('./routes/stories');
 const keys = require('./config/keys');
 const { patch } = require('./routes/auth');
 
+// Handlebars Helpers
+const {
+  truncate,
+  stripTags,
+  formatDate,
+  select
+} = require('./helpers/hbs');
+
 // Map global promise
 mongoose.Promise = global.Promise;
 // mongoose connect
@@ -44,9 +54,18 @@ const app = express();
 app.use(bodyParser.urlencoded({extended : false}))
 app.use(bodyParser.json());
 
+// Method override middleware
+app.use(methodOverride('_method'));
+
 
 // Handlebars Middleware
 app.engine('handlebars', exphbs({
+  helpers :{
+    truncate : truncate,
+    stripTags : stripTags,
+    formatDate : formatDate,
+    select : select
+  },
   defaultLayout : 'main',
   handlebars: allowInsecurePrototypeAccess(Handlebars)
 }));

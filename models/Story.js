@@ -32,7 +32,7 @@ const StorySchema = new Schema({
         commentUser : {
             type : Schema.Types.ObjectId,
             ref : 'users'
-        },
+        }
     }],
     user : {
         type  : Schema.Types.ObjectId,
@@ -40,11 +40,12 @@ const StorySchema = new Schema({
     },
     date : {
         type : Date,
-        default : Date.now()
+        default : Date.now
     }
 });
 
 
 // create colllection and add shcema
-const Stories = mongoose.model('stories', StorySchema, 'stories');
+// const Stories = mongoose.model('stories', StorySchema, 'stories');
+const Stories = mongoose.model('stories', StorySchema);
 module.exports = Stories;
