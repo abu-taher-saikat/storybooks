@@ -11,6 +11,7 @@ router.get('/',(req, res)=>{
     try{
         Stories.find({status : 'public'})
         .populate('user')
+        .sort({date : 'desc'})
         .then(stories =>{
             res.render('stories/index',{
                 stories : stories
@@ -44,11 +45,48 @@ router.get('/show/:id',(req, res)=>{
     .populate('user')
     .populate('comments.commentUser')
     .then(story=>{
-        res.render('stories/show',{
-            story : story
+        if(story.status == 'public'){
+            res.render('stories/show',{
+                story : story
+            });
+        }else{
+            if(req.user){
+                if(req.user.id == story.user._id){
+                    res.render('stories/show',{
+                        story : story
+                    });
+                }else{
+                    res.redirect('/stories');
+                }
+            }else{
+                res.redirect('/stories');
+            }
+        }
+    })
+})
+
+// List story from a user 
+router.get('/user/:userId', (req, res)=>{
+    Stories.find({user : req.params.userId , status : 'public'})
+    .populate('user')
+    .then(stories =>{
+        res.render('stories/index',{
+            stories : stories
         })
     })
 })
+
+// Logged in users storis
+router.get('/my',ensureAuthenticated, (req, res)=>{
+    Stories.find({user : req.user.id})
+    .populate('user')
+    .then(stories =>{
+        res.render('stories/index',{
+            stories : stories
+        })
+    })
+})
+
 
 // Add Story form
 router.get('/add', ensureAuthenticated,(req, res)=>{
@@ -61,9 +99,13 @@ router.get('/add', ensureAuthenticated,(req, res)=>{
             _id : req.params.id
         })
         .then(story =>{
-            res.render('stories/edit',{
-                story : story
-            });
+            if(story.user != req.user.id){
+                res.redirect('/stories');
+            }else{
+                res.render('stories/edit',{
+                    story : story
+                });
+            }
         });
     });
 
